@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hold_sequence_sales_manager,hold.sequence sales manager,model_hold_sequence,sales_team.group_sale_manager,1,1,1,1
+access_hold_sequence_stock_manager,hold.sequence stock manager,model_hold_sequence,stock.group_stock_manager,1,1,1,1
+access_hold_sequence_line_sales_manager,hold.sequence.line sales manager,model_hold_sequence_line,sales_team.group_sale_manager,1,1,1,1
+access_hold_sequence_line_stock_manager,hold.sequence.line stock manager,model_hold_sequence_line,stock.group_stock_manager,1,1,1,1
