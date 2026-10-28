@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="sale_analytic_distribution_amount.AnalyticDistributionPopup"
+       t-inherit="analytic.AnalyticDistributionPopup"
+       t-inherit-mode="extension"
+       owl="1">
+
+        <!-- [% | Amount] toggle in the popup header -->
+        <xpath expr="//div[hasclass('popupButtons')]" position="before">
+            <div class="ada_mode_toggle btn-group align-self-center me-2" t-if="valueColumnEnabled">
+                <button type="button"
+                        class="btn btn-secondary btn-sm"
+                        t-att-class="{active: adaMode === 'percentage'}"
+                        t-on-click.stop.prevent="() => this.setAdaMode('percentage')"
+                        title="Enter the distribution as percentages">%</button>
+                <button type="button"
+                        class="btn btn-secondary btn-sm"
+                        t-att-class="{active: adaMode === 'amount'}"
+                        t-on-click.stop.prevent="() => this.setAdaMode('amount')"
+                        title="Enter the distribution as fixed amounts">Amount</button>
+            </div>
+        </xpath>
+
+        <!-- Percentage column header: percentage mode only -->
+        <xpath expr="//thead//th[hasclass('numeric_column_width')][1]" position="attributes">
+            <attribute name="t-if">adaMode === 'percentage'</attribute>
+        </xpath>
+
+        <!-- Value column header: amount mode only, with an explicit label -->
+        <xpath expr="//thead//th[hasclass('numeric_column_width')][2]" position="replace">
+            <th t-if="valueColumnEnabled &amp;&amp; adaMode === 'amount'" class="numeric_column_width">Fixed Amount</th>
+        </xpath>
+
+        <!-- Percentage cell: percentage mode only -->
+        <xpath expr="//tbody//td[hasclass('numeric_column_width')][1]" position="attributes">
+            <attribute name="t-if">adaMode === 'percentage'</attribute>
+        </xpath>
+
+        <!-- Value cell: amount mode only -->
+        <xpath expr="//tbody//td[hasclass('numeric_column_width')][2]" position="attributes">
+            <attribute name="t-if">valueColumnEnabled &amp;&amp; adaMode === 'amount'</attribute>
+        </xpath>
+
+        <!-- Percentage hint under the amount input -->
+        <xpath expr="//tbody//td[hasclass('numeric_column_width')][2]" position="inside">
+            <small class="ada_percentage_hint text-muted"
+                   t-if="valueColumnEnabled &amp;&amp; adaMode === 'amount'"
+                   t-out="adaFormatPercentage(line.percentage)"/>
+        </xpath>
+
+        <!-- Exactly one extra column (percentage OR amount) is visible -->
+        <xpath expr="//td[hasclass('o_field_x2many_list_row_add')]" position="attributes">
+            <attribute name="t-att-colspan">allPlans.length + 2</attribute>
+        </xpath>
+
+        <!-- Footer: subtotal basis and distributed amount -->
+        <xpath expr="//table" position="after">
+            <div class="ada_amount_footer d-flex justify-content-between px-1 pt-1 small text-muted"
+                 t-if="valueColumnEnabled &amp;&amp; adaMode === 'amount' &amp;&amp; !props.multi_edit">
+                <span>
+                    Subtotal: <t t-out="adaFormatAmount(adaTotals().subtotal)"/>
+                </span>
+                <span t-att-class="{'text-danger': adaTotals().remaining &lt; -0.01, 'text-success': adaTotals().remaining &gt;= -0.01 &amp;&amp; adaTotals().remaining &lt;= 0.01}">
+                    Distributed: <t t-out="adaFormatAmount(adaTotals().distributed)"/> (<t t-out="adaTotals().percentage"/>%)
+                </span>
+            </div>
+        </xpath>
+
+    </t>
+
+</templates>

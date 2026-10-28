@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_ada" model="ir.ui.view">
+        <field name="name">sale.order.form.analytic.distribution.amount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!--
+                Order lines list (editable tree inside the sale order form):
+                load the amounts field so the analytic distribution widget can
+                write the fixed amounts entered by the user.
+            -->
+            <xpath expr="//list//field[@name='analytic_distribution']" position="after">
+                <field name="analytic_distribution_amount"
+                       column_invisible="True"
+                       force_save="1"
+                       groups="analytic.group_analytic_accounting"/>
+            </xpath>
+            <!--
+                Order line inner form: enable the amount column in the analytic
+                distribution popup and load the fields it needs.
+            -->
+            <xpath expr="//form//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="options">{'product_field': 'product_id', 'business_domain': 'sale_order', 'amount_field': 'price_subtotal'}</attribute>
+            </xpath>
+            <xpath expr="//form//field[@name='analytic_distribution']" position="after">
+                <field name="currency_id" invisible="1"/>
+                <field name="analytic_distribution_amount"
+                       invisible="1"
+                       force_save="1"
+                       groups="analytic.group_analytic_accounting"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
