@@ -42,6 +42,13 @@ class HoldSequence(models.Model):
         string='Lines',
         copy=True,
     )
+    picking_id = fields.Many2one(
+        'stock.picking',
+        string='Receipt',
+        readonly=True,
+        copy=False,
+        index=True,
+    )
 
 
     @api.model_create_multi

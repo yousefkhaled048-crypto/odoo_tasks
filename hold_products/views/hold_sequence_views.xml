@@ -14,6 +14,7 @@
                        decoration-info="state == 'draft'"
                        decoration-success="state == 'confirmed'"
                        decoration-danger="state == 'cancelled'"/>
+                <field name="picking_id" optional="show"/>
             </list>
         </field>
     </record>
@@ -41,6 +42,7 @@
                     <group>
                         <group>
                             <field name="date" readonly="state != 'draft'"/>
+                            <field name="picking_id" invisible="not picking_id"/>
                         </group>
                         <group>
                             <field name="company_id" groups="base.group_multi_company"

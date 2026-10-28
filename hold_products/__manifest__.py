@@ -3,7 +3,7 @@
     'version': '18.0.1.0.0',
     'summary': 'Hold stock quantities and block Sale Orders from selling held quantities',
     'category': 'Sales',
-    'depends': ['sale_management', 'stock'],
+    'depends': ['sale_management', 'stock', 'purchase_stock'],
     'data': [
         'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
