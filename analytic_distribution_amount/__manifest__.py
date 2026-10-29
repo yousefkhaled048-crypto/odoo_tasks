@@ -18,9 +18,12 @@ Sale Analytic Distribution by Fixed Amount
 - A footer shows the subtotal basis and the distributed amount while editing.
 """,
     'author': 'Yousef',
-    'depends': ['sale'],
-    'data': [
-        'views/sale_order_views.xml',
+    'depends': ['sale', 'account', 'purchase', 'hr_expense'],
+        'data': [
+            'views/sale_order_views.xml',
+            'views/account_move_views.xml',
+            'views/purchase_order_views.xml',
+            'views/hr_expense_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

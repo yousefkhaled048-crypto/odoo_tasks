@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_inherit_analytic_amount" model="ir.ui.view">
+        <field name="name">purchase.order.form.analytic.distribution.amount</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- 1) PO lines list: widget already has amount_field -> persistence only -->
+            <xpath expr="//list//field[@name='analytic_distribution']" position="after">
+                <field name="analytic_distribution_amount"
+                       column_invisible="True"
+                       force_save="1"
+                       groups="analytic.group_analytic_accounting"/>
+            </xpath>
+            <!-- 2) Expanded line form: enable amount column + persistence -->
+            <xpath expr="//form//form//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="options">{'product_field': 'product_id', 'business_domain': 'purchase_order', 'amount_field': 'price_subtotal'}</attribute>
+            </xpath>
+            <xpath expr="//form//form//field[@name='analytic_distribution']" position="after">
+                <field name="analytic_distribution_amount"
+                       invisible="1"
+                       groups="analytic.group_analytic_accounting"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Standalone Purchase Order Line form -->
+    <record id="purchase_order_line_form2_inherit_analytic_amount" model="ir.ui.view">
+        <field name="name">purchase.order.line.form.analytic.distribution.amount</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="options">{'product_field': 'product_id', 'business_domain': 'purchase_order', 'amount_field': 'price_subtotal'}</attribute>
+            </xpath>
+            <xpath expr="//form//field[@name='analytic_distribution']" position="after">
+                <field name="price_subtotal" invisible="1"/>
+                <field name="analytic_distribution_amount"
+                       invisible="1"
+                       groups="analytic.group_analytic_accounting"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
