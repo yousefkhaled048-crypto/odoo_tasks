@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_technical_order_approved" model="mail.template">
+        <field name="name">Technical Order: Approved</field>
+        <field name="model_id" ref="model_technical_order"/>
+        <field name="subject">Technical Order {{ object.name }} has been approved</field>
+        <field name="email_from">{{ user.email_formatted }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-size: 13px;">
+                <p>Hello,</p>
+                <p>Technical Order <t t-out="object.name"/> has been approved.</p>
+                <p>
+                    Request: <t t-out="object.request_name"/><br/>
+                    Customer: <t t-out="object.customer_id.name"/><br/>
+                    Requested by: <t t-out="object.requested_by.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+</odoo>

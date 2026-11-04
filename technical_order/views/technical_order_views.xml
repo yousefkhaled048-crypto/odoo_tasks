@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List -->
+    <record id="technical_order_view_list" model="ir.ui.view">
+        <field name="name">technical.order.list</field>
+        <field name="model">technical.order</field>
+        <field name="arch" type="xml">
+            <list string="Technical Orders"
+                  decoration-info="state == 'to_approve'"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="request_name"/>
+                <field name="customer_id"/>
+                <field name="requested_by"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_price" sum="Total"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'to_approve'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="technical_order_view_form" model="ir.ui.view">
+        <field name="name">technical.order.form</field>
+        <field name="model">technical.order</field>
+        <field name="arch" type="xml">
+            <form string="Technical Order">
+                <header>
+                    <button name="action_submit" type="object" string="Submit for Approval"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            class="btn-primary" invisible="state != 'to_approve'"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state != 'to_approve'"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft"
+                            invisible="state != 'cancelled'"/>
+                    <button name="action_create_so" type="object" string="Create SO"
+                            class="btn-primary"
+                            invisible="state != 'approved' or not show_create_so"
+                            groups="sales_team.group_sale_salesman"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,to_approve,approved"
+                           options="{'clickable': False}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sale_orders" type="object"
+                                class="oe_stat_button" icon="fa-list"
+                                invisible="state != 'approved'">
+                            <field name="sale_order_count" widget="statinfo"
+                                   string="Technical Orders"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="show_create_so" invisible="1"/>
+                            <field name="request_name"
+                                   readonly="state in ('approved', 'rejected', 'cancelled')"/>
+                            <field name="requested_by"
+                                   readonly="state in ('approved', 'rejected', 'cancelled')"/>
+                            <field name="customer_id"
+                                   readonly="state in ('approved', 'rejected', 'cancelled')"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="start_date"
+                                   readonly="state in ('approved', 'rejected', 'cancelled')"/>
+                            <field name="end_date"
+                                   readonly="state in ('approved', 'rejected', 'cancelled')"/>
+                            <field name="rejection_reason" readonly="1"
+                                   invisible="state != 'rejected'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines" name="order_lines">
+                            <field name="order_line_ids"
+                                   readonly="state in ('approved', 'rejected', 'cancelled')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="price"/>
+                                    <field name="total" sum="Total"/>
+                                    <field name="remaining_quantity"
+                                           column_invisible="parent.state != 'approved'"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_price" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search -->
+    <record id="technical_order_view_search" model="ir.ui.view">
+        <field name="name">technical.order.search</field>
+        <field name="model">technical.order</field>
+        <field name="arch" type="xml">
+            <search string="Search Technical Orders">
+                <field name="name"/>
+                <field name="request_name"/>
+                <field name="customer_id"/>
+                <field name="requested_by"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_to_approve" string="To Be Approved" domain="[('state', '=', 'to_approve')]"/>
+                <filter name="filter_approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="filter_rejected" string="Rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter name="filter_cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter name="filter_my" string="My Orders" domain="[('requested_by', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_customer" string="Customer" context="{'group_by': 'customer_id'}"/>
+                    <filter name="group_requested_by" string="Requested By" context="{'group_by': 'requested_by'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="technical_order_action" model="ir.actions.act_window">
+        <field name="name">Technical Orders</field>
+        <field name="res_model">technical.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="technical_order_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first technical order</p>
+        </field>
+    </record>
+</odoo>

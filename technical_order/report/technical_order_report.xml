@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_technical_order" model="ir.actions.report">
+        <field name="name">Technical Order</field>
+        <field name="model">technical.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">technical_order.report_technical_order</field>
+        <field name="report_file">technical_order.report_technical_order</field>
+        <field name="print_report_name">'Technical Order - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_technical_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_technical_order_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Technical Order <span t-field="o.name"/></h2>
+
+                <div class="row mt-4 mb-4">
+                    <div class="col-6">
+                        <p><strong>Request Name:</strong> <span t-field="o.request_name"/></p>
+                        <p><strong>Requested By:</strong> <span t-field="o.requested_by"/></p>
+                        <p><strong>Customer:</strong> <span t-field="o.customer_id"/></p>
+                    </div>
+                    <div class="col-6">
+                        <p><strong>Start Date:</strong> <span t-field="o.start_date"/></p>
+                        <p><strong>End Date:</strong> <span t-field="o.end_date"/></p>
+                        <p><strong>State:</strong> <span t-field="o.state"/></p>
+                    </div>
+                </div>
+
+                <div t-if="o.state == 'rejected' and o.rejection_reason" class="mb-4">
+                    <strong>Rejection Reason:</strong>
+                    <span t-field="o.rejection_reason"/>
+                </div>
+
+                <table class="table table-sm o_main_table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-end">Quantity</th>
+                            <th class="text-end">Unit Price</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.order_line_ids" t-as="line">
+                            <td><span t-field="line.description"/></td>
+                            <td class="text-end"><span t-field="line.quantity"/></td>
+                            <td class="text-end"><span t-field="line.price"/></td>
+                            <td class="text-end"><span t-field="line.total"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <table class="table table-sm">
+                            <tr class="border-black">
+                                <td><strong>Total Price</strong></td>
+                                <td class="text-end"><span t-field="o.total_price"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_technical_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="technical_order.report_technical_order_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

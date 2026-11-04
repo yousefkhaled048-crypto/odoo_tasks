@@ -1,0 +1,21 @@
+{
+    'name': 'Technical Order',
+    'version': '18.0.1.0.0',
+    'category': 'Sales',
+    'summary': 'Technical orders with approval workflow and Sales Order integration',
+    'depends': ['sale_management', 'mail'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/sequence.xml',
+        'data/mail_template.xml',
+        'views/res_partner_views.xml',
+        'wizard/rejection_wizard_views.xml',
+        'views/technical_order_views.xml',
+        'views/sale_order_views.xml',
+        'views/menu_views.xml',
+        'report/technical_order_report.xml',
+    ],
+    'application': True,
+    'installable': True,
+    'license': 'LGPL-3',
+}

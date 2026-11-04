@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_store_orders_root"
+              name="Store Orders"
+              sequence="50"
+              groups="sales_team.group_sale_salesman"/>
+
+    <menuitem id="menu_technical_order"
+              name="Orders"
+              parent="menu_store_orders_root"
+              action="technical_order_action"
+              sequence="10"/>
+</odoo>
