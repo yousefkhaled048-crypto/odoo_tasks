@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_credit_limit" model="ir.ui.view">
+        <field name="name">res.partner.form.credit.limit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']/group[@name='container_row_2']" position="after">
+                <group name="credit_limit_approval" string="Credit Limit">
+                    <div colspan="2" class="text-muted" invisible="not credit_managed_by_parent">
+                        <i class="fa fa-info-circle me-1" role="img" title="Information"/>
+                        <span>The credit limit is managed on the parent company: </span>
+                        <field name="commercial_partner_id" class="oe_inline" readonly="1"/>
+                    </div>
+                    <group name="credit_limit_settings" invisible="credit_managed_by_parent">
+                        <field name="credit_limit_editable" invisible="1"/>
+                        <field name="partner_limit" readonly="not credit_limit_editable"/>
+                        <label for="partner_credit_limit" invisible="not partner_limit"/>
+                        <div class="o_row" invisible="not partner_limit">
+                            <field name="partner_credit_limit"
+                                   class="oe_inline"
+                                   readonly="not credit_limit_editable"/>
+                            <field name="partner_credit_currency_id"
+                                   class="oe_inline"
+                                   groups="base.group_multi_currency"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   readonly="not credit_limit_editable"/>
+                        </div>
+                        <field name="partner_credit_currency_id" invisible="1"/>
+                    </group>
+                    <group name="credit_limit_usage" invisible="credit_managed_by_parent or not partner_limit">
+                        <field name="credit_company_currency_id" invisible="1"/>
+                        <field name="credit_outstanding_amount"/>
+                        <field name="credit_available_amount"
+                               decoration-danger="credit_available_amount &lt; 0"
+                               decoration-success="credit_available_amount &gt;= 0"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
