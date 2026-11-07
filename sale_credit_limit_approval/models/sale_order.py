@@ -155,7 +155,15 @@ class SaleOrder(models.Model):
                 outstanding_cache[key] = self.env['res.partner']._credit_get_outstanding_map(
                     commercial, company,
                 ).get(commercial._origin.id, 0.0)
-            outstanding = outstanding_cache[key]
+            # outstanding = outstanding_cache[key]
+            # Open invoices + the customer's other open quotations/orders
+            others = self.sudo().search([
+                ('partner_id.commercial_partner_id', '=', commercial._origin.id),
+                ('company_id', '=', company.id),
+                ('state', 'in', ('draft', 'sent', 'sale')),
+            ] + ([('id', '<', order._origin.id)] if order._origin.id else []))
+            outstanding = outstanding_cache[key] + sum(
+                o._credit_get_order_amount(company) for o in others)
             limit = commercial._credit_get_limit_in_company_currency(company, today)
             order_amount = order._credit_get_order_amount(company)
             exposure = outstanding + order_amount
@@ -163,7 +171,8 @@ class SaleOrder(models.Model):
             order.credit_check_required = True
             order.credit_limit_amount = limit
             order.credit_outstanding_amount = outstanding
-            order.credit_available_amount = limit - outstanding
+            # Available = limit - (outstanding invoices + current order amount)
+            order.credit_available_amount = limit - exposure
             order.credit_order_amount = order_amount
             order.credit_exposure_amount = exposure
             order.credit_status = (
