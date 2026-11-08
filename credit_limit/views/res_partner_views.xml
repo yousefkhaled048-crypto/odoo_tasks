@@ -1,0 +1,24 @@
+<odoo>
+    <record id="view_partner_form_credit_limit" model="ir.ui.view">
+        <field name="name">res.partner.form.credit.limit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='use_partner_credit_limit']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='credit_limit']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='use_partner_credit_limit']/ancestor::group[1]"
+                   position="inside">
+                <field name="credit_check"/>
+                <field name="customer_credit_limit" invisible="not credit_check"/>
+                <field name="due_amount" readonly="1" invisible="not credit_check"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

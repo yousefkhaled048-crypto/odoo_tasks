@@ -1,0 +1,59 @@
+<odoo>
+    <record id="view_order_form_credit_info" model="ir.ui.view">
+        <field name="name">sale.order.form.credit.info</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Hidden fields used in the conditions below -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="credit_check_enabled" invisible="1"/>
+                <field name="credit_exceeded" invisible="1"/>
+                <field name="credit_approved_1" invisible="1"/>
+                <field name="credit_approved_2" invisible="1"/>
+            </xpath>
+
+            <!-- hide default status bar -->
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- add status bar with approval buttons -->
+            <xpath expr="//header/field[@name='state']" position="after">
+                <field name="credit_stage" widget="statusbar"
+                       statusbar_visible="draft,sent,approved_1,approved_2,sale"/>
+            </xpath>
+
+            <xpath expr="(//button[@name='action_confirm'])[1]" position="before">
+
+                <button name="action_credit_approve_1" type="object" string="Approve 1"
+                        class="btn-primary"
+                        confirm="This order exceeds the customer credit limit. Do you want to approve it?"
+                        invisible="state not in ('draft', 'sent') or not credit_check_enabled or not credit_exceeded or credit_approved_1"/>
+
+                <button name="action_credit_approve_1" type="object" string="Approve 1"
+                        class="btn-secondary disabled"
+                        invisible="state not in ('draft', 'sent') or not credit_check_enabled or credit_exceeded or credit_approved_2"/>
+
+                <button name="action_credit_approve_2" type="object" string="Approve 2"
+                        class="btn-primary"
+                        invisible="state not in ('draft', 'sent') or not credit_check_enabled or credit_approved_2 or (credit_exceeded and not credit_approved_1)"/>
+            </xpath>
+
+            <!-- hide confirm button until click approve 2 -->
+            <xpath expr="(//button[@name='action_confirm'])[1]" position="attributes">
+                <attribute name="invisible" add="credit_check_enabled and not credit_approved_2" separator=" or "/>
+            </xpath>
+            <xpath expr="(//button[@name='action_confirm'])[2]" position="attributes">
+                <attribute name="invisible" add="credit_check_enabled and not credit_approved_2" separator=" or "/>
+            </xpath>
+
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-warning mb-0" role="alert"
+                     invisible="not credit_info_message">
+                    <field name="credit_info_message" readonly="1" nolabel="1"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
