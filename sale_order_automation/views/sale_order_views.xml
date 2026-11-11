@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_automation" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.automation</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Header button: only in Quotation state -->
+            <header position="inside">
+                <button name="action_automate_sale_order"
+                        string="Automate Sale Order"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="state != 'draft'"
+                        confirm="This will confirm the order, validate deliveries, create and post the invoice, and register the payment. Continue?"/>
+            </header>
+
+            <!-- 2. Payments smart button -->
+            <div name="button_box" position="inside">
+                <button name="action_view_payments"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-money"
+                        invisible="payment_count == 0">
+                    <field name="payment_count" widget="statinfo" string="Payments"/>
+                </button>
+            </div>
+
+            <!-- Field needed so the read-only expressions can use it -->
+            <field name="partner_id" position="after">
+                <field name="is_automated" invisible="1"/>
+            </field>
+
+            <!-- 3. Read-only rules after automation -->
+            <field name="partner_id" position="attributes">
+                <attribute name="readonly">state in ['cancel', 'sale'] or is_automated</attribute>
+            </field>
+
+            <field name="order_line" position="attributes">
+                <attribute name="readonly">state in ['cancel', 'done'] or is_automated</attribute>
+            </field>
+
+        </field>
+    </record>
+</odoo>
