@@ -1,0 +1,204 @@
+/* ============ Base ============ */
+.meat-invoice {
+    font-family: 'Cairo', 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #222;
+    direction: rtl;
+    text-align: right;
+    padding: 0 6px 60px 6px; /* مساحة تحت للفوتر المثبّت */
+}
+
+.meat-invoice table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 0;
+}
+
+.meat-invoice .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-block;
+}
+
+.meat-invoice .lbl {
+    font-weight: bold;
+}
+
+.meat-invoice .placeholder-box {
+    margin: 0 auto;
+}
+
+/* ============ Header ============ */
+.meat-invoice .invoice-header {
+    margin-bottom: 10px;
+}
+
+.meat-invoice .invoice-header td {
+    vertical-align: top;
+    text-align: right;
+    padding: 0 4px 10px 4px;
+    border: 0;
+}
+
+.meat-invoice .invoice-header td.header-center {
+    text-align: center;
+}
+
+.meat-invoice .company-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.meat-invoice .company-details {
+    line-height: 1.9;
+}
+
+.meat-invoice .company-logo {
+    height: 62px;
+    max-width: 120px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 6px auto;
+}
+
+.meat-invoice .invoice-title {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+}
+
+.meat-invoice .header-divider {
+    border: none;
+    border-top: 3px solid #9a9a9a;
+    margin: 0 0 12px 0;
+}
+
+/* ============ Invoice info (horizontal lines only) ============ */
+.meat-invoice .invoice-info-table {
+    margin-bottom: 16px;
+}
+
+.meat-invoice .invoice-info-table td {
+    width: 33.33%;
+    padding: 9px 6px;
+    border: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid #d5d5d5;
+    border-bottom: 1px solid #d5d5d5;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.meat-invoice .info-label {
+    font-weight: bold;
+}
+
+.meat-invoice .info-value {
+    font-weight: normal;
+}
+
+/* ============ Products table (no vertical lines) ============ */
+.meat-invoice .products-table {
+    margin-bottom: 16px;
+}
+
+.meat-invoice .products-table th {
+    background-color: #d9d9d9;
+    border: 0;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    padding: 8px 4px;
+    text-align: center;
+    font-weight: normal;
+    vertical-align: middle;
+}
+
+.meat-invoice .products-table td {
+    border: 0;
+    border-bottom: 1px solid #cccccc;
+    padding: 9px 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.meat-invoice .products-table .product-name {
+    text-align: center;
+}
+
+/* ============ Totals + QR (full borders) ============ */
+.meat-invoice .totals-table {
+    margin-bottom: 16px;
+}
+
+.meat-invoice .totals-table td {
+    border: 1px solid #dddddd;
+    padding: 9px 12px;
+    vertical-align: middle;
+}
+
+.meat-invoice .totals-table .totals-label {
+    width: 41%;
+    font-weight: bold;
+    text-align: right;
+}
+
+.meat-invoice .totals-table .totals-value {
+    width: 37%;
+    text-align: center;
+}
+
+.meat-invoice .totals-table .totals-qr {
+    width: 22%;
+    text-align: center;
+    padding: 8px;
+}
+
+.meat-invoice .qr-big {
+    width: 110px;
+    height: 110px;
+}
+
+/* ============ Notes box (full borders) ============ */
+.meat-invoice .notes-table {
+    margin-bottom: 16px;
+}
+
+.meat-invoice .notes-table td {
+    border: 1px solid #dddddd;
+    padding: 12px 14px;
+    vertical-align: top;
+}
+
+.meat-invoice .notes-table .notes-text {
+    width: 86%;
+    line-height: 1.9;
+}
+
+.meat-invoice .notes-table .notes-qr {
+    width: 14%;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+}
+
+.meat-invoice .qr-small {
+    width: 78px;
+    height: 78px;
+}
+
+/* ============ Footer (fixed at page bottom) ============ */
+.meat-invoice .invoice-footer {
+    position: fixed;
+    bottom: 0;
+    left: 6px;
+    right: 6px;
+    border-top: 1px solid #cccccc;
+    padding: 8px 0 4px 0;
+    text-align: center;
+    font-size: 11px;
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_meat_order" model="ir.ui.view">
+        <field name="name">sale.order.form.meat.order</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- hide default group of fields -->
+            <xpath expr="//group[@name='sale_header']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Add Meat Order Details -->
+            <xpath expr="//notebook" position="before">
+                <group>
+                    <!-- Left Column -->
+                    <group>
+                        <field name="partner_id" string="Customer"/>
+                        <field name="phone_number" string="رقم الهاتف" widget="phone" readonly="1"/>
+                        <field name="meal_type"/>
+                        <field name="carcass_type"/>
+                        <field name="carcass_count"/>
+                        <field name="cooking_style"/>
+                        <field name="cutting_type"/>
+                    </group>
+
+                    <!-- Right Column -->
+                    <group>
+                        <field name="plate_type"/>
+                        <field name="plate_count"/>
+                        <field name="order_date"/>
+                        <field name="carcass_number"/>
+                        <field name="delivery_date"/>
+                        <field name="delivery_type"/>
+                    </group>
+                </group>
+
+                <!-- Notes -->
+                <group string="ملاحظات">
+                    <field name="order_notes" placeholder="أضف ملاحظاتك هنا..." nolabel="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

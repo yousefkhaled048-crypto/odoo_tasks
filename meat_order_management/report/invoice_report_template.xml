@@ -1,0 +1,228 @@
+<odoo>
+    <template id="report_meat_invoice">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lines" t-value="o.order_line.filtered(lambda l: not l.display_type)"/>
+                <t t-set="inv" t-value="o.invoice_ids.filtered(lambda i: i.state == 'posted')[:1] or o.invoice_ids[:1]"/>
+                <t t-set="qr" t-value="inv and ('l10n_sa_qr_code_str' in inv.fields_get(['l10n_sa_qr_code_str'])) and inv.l10n_sa_qr_code_str or ''"/>
+                <t t-set="discount" t-value="sum([l.product_uom_qty * l.price_unit * l.discount / 100.0 for l in lines])"/>
+
+                <div class="page meat-invoice" dir="rtl">
+
+                    <!-- Company Header -->
+                    <table class="invoice-header">
+                        <tr>
+                            <!-- Right: company name -->
+                            <td style="width: 38%;">
+                                <div class="company-name">
+                                    <span t-field="o.company_id.name"/>
+                                </div>
+                                <div class="company-details">
+                                    <div>مندي - عربي - مكبوس بخاري - حنيذ - كوزي</div>
+                                    <div>تليفون: <span t-field="o.company_id.phone"/></div>
+                                </div>
+                            </td>
+
+                            <!-- Center: logo + title -->
+                            <td class="header-center" style="width: 24%;">
+                                <img t-if="o.company_id.logo"
+                                     t-att-src="image_data_uri(o.company_id.logo)"
+                                     class="company-logo"/>
+                                <div t-else="" class="placeholder-box" style="width: 90px; height: 62px;"></div>
+                                <div class="invoice-title">فاتورة ضريبية مبسطة</div>
+                            </td>
+
+                            <!-- Left: address -->
+                            <td style="width: 38%;">
+                                <div class="company-name">
+                                    <span t-field="o.company_id.partner_id.city"/>
+                                </div>
+                                <div class="company-details">
+                                    <div><span t-field="o.company_id.partner_id.street"/></div>
+                                    <div>السجل التجاري: <span t-field="o.company_id.company_registry"/></div>
+                                    <div>الرقم الضريبي: <span t-field="o.company_id.vat"/></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <hr class="header-divider"/>
+
+                    <!-- Invoice + order info -->
+                    <table class="invoice-info-table">
+                        <tr>
+                            <td>
+                                <span class="info-label">رقم الفاتورة : </span>
+                                <span class="info-value ltr" t-out="inv.name if inv else ''"/>
+                            </td>
+                            <td>
+                                <span class="info-label">تاريخ الفاتورة : </span>
+                                <span class="info-value ltr" t-if="inv and inv.invoice_date" t-field="inv.invoice_date" t-options="{'widget': 'date', 'format': 'MM/dd/yyyy'}"/>
+                                <span class="info-value ltr" t-else="" t-field="o.order_date" t-options="{'widget': 'date', 'format': 'MM/dd/yyyy'}"/>
+                            </td>
+                            <td>
+                                <span class="info-label">رقم المرجع : </span>
+                                <span class="info-value ltr" t-out="o.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="info-label">اسم العميل : </span>
+                                <span class="info-value" t-field="o.partner_id.name"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="info-label">هاتف العميل : </span>
+                                <span class="info-value ltr" t-out="o.phone_number"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="info-label">العنوان : </span>
+                                <span class="info-value" t-out="', '.join([x for x in [o.partner_id.street, o.partner_id.city] if x])"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="info-label">الرقم الضريبي : </span>
+                                <span class="info-value" t-out="o.partner_id.vat"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="info-label">عدد الذبائح : </span>
+                                <span class="info-value" t-out="sum(lines.mapped('product_uom_qty'))"/>
+                            </td>
+                            <td>
+                                <span class="info-label">عدد الصحون : </span>
+                                <span class="info-value" t-field="o.plate_count"/>
+                            </td>
+                            <td>
+                                <span class="info-label">نوع الذبيحة : </span>
+                                <span class="info-value" t-field="o.carcass_type"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="info-label">نوع الطبخ : </span>
+                                <span class="info-value" t-field="o.cooking_style"/>
+                            </td>
+                            <td>
+                                <span class="info-label">الوجبة : </span>
+                                <span class="info-value" t-field="o.meal_type"/>
+                            </td>
+                            <td>
+                                <span class="info-label">التفاصيل : </span>
+                                <span class="info-value" t-field="o.cutting_type"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="info-label">رقم الذبيحة : </span>
+                                <span class="info-value" t-field="o.carcass_number"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="info-label">ملاحظات : </span>
+                                <span class="info-value" t-field="o.order_notes"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="info-label">وقت التسليم : </span>
+                                <span class="info-value ltr" t-if="o.delivery_date" t-field="o.delivery_date" t-options="{'widget': 'datetime', 'format': 'hh:mm a'}"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="info-label">الكاشير : </span>
+                                <span class="info-value" t-out="o.user_id.name or o.create_uid.name"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Products table -->
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">م</th>
+                                <th style="width: 27%;">اسم الصنف</th>
+                                <th style="width: 9%;">الوحدة</th>
+                                <th style="width: 9%;">الكمية</th>
+                                <th style="width: 11%;">السعر</th>
+                                <th style="width: 14%;">الإجمالي<br/>غير شامل<br/>ضريبة</th>
+                                <th style="width: 10%;">الضريبة</th>
+                                <th style="width: 15%;">الإجمالي<br/>شامل ضريبة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="lines" t-as="line">
+                                <tr>
+                                    <td t-out="line_index + 1"/>
+                                    <td class="product-name" t-out="line.name"/>
+                                    <td t-out="line.product_uom_id.name"/>
+                                    <td t-out="line.product_uom_qty"/>
+                                    <td t-out="'{:,.2f}'.format(line.price_unit)"/>
+                                    <td t-out="'{:,.2f}'.format(line.price_subtotal)"/>
+                                    <td t-out="'{:,.2f}'.format(line.price_total - line.price_subtotal)"/>
+                                    <td t-out="'{:,.2f}'.format(line.price_total)"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Totals -->
+                    <table class="totals-table">
+                        <tr>
+                            <td class="totals-label">المجموع (غير شامل ضريبة القيمة المضافة)</td>
+                            <td class="totals-value" t-out="'{:,.2f}'.format(o.amount_untaxed)"/>
+                            <td class="totals-qr" rowspan="5">
+                                <img t-if="qr" class="qr-big"
+                                     t-att-src="'/report/barcode/?barcode_type=QR&amp;value=%s&amp;width=130&amp;height=130' % qr"/>
+                                <div t-else="" class="placeholder-box qr-big"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="totals-label">الخصم</td>
+                            <td class="totals-value" t-out="'{:,.2f}'.format(discount)"/>
+                        </tr>
+                        <tr>
+                            <td class="totals-label">المجموع خاضع للضريبة</td>
+                            <td class="totals-value" t-out="'{:,.2f}'.format(o.amount_untaxed)"/>
+                        </tr>
+                        <tr>
+                            <td class="totals-label">إجمالي ضريبة القيمة المضافة (15 %)</td>
+                            <td class="totals-value" t-out="'{:,.2f}'.format(o.amount_tax)"/>
+                        </tr>
+                        <tr>
+                            <td class="totals-label">الإجمالي (شامل ضريبة القيمة المضافة)</td>
+                            <td class="totals-value" t-out="'{:,.2f}'.format(o.amount_total)"/>
+                        </tr>
+                    </table>
+
+                    <!-- Notes -->
+                    <table class="notes-table">
+                        <tr>
+                            <td class="notes-text">
+                                <div class="lbl">ملاحظات :</div>
+                                <div>* في حالة تأخر العميل عن استرجاع الصحون في مدة تزيد عن ثلاثة أيام يصبح التأمين غير مسترد.</div>
+                                <div>* يجب احضار سند التأمين لاستلام قيمة التأمين.</div>
+                            </td>
+                            <td class="notes-qr" style="border-right: 1px solid #dddddd;">
+                                <img t-if="qr" class="qr-small"
+                                     t-att-src="'/report/barcode/?barcode_type=QR&amp;value=%s&amp;width=90&amp;height=90' % qr"/>
+                                <div t-else="" class="placeholder-box qr-small"></div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Footer -->
+                    <div class="invoice-footer">
+                        <span class="lbl">رقم الحساب : </span><span class="ltr">419000010006080465552</span>
+                        &#160;&#160;|&#160;&#160;
+                        <span class="lbl">رقم الآيبان : </span><span class="ltr">SA9280000419608010465552</span>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
