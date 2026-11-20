@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_product_form_additional_barcodes" model="ir.ui.view">
+        <field name="name">product.product.form.additional.barcodes</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Additional Barcodes">
+                    <field name="product_uom_ids" context="{'default_product_id': id}">
+                        <list editable="bottom">
+                            <field name="uom_id" string="Unit of Measure"/>
+                            <field name="barcode" string="Barcode"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

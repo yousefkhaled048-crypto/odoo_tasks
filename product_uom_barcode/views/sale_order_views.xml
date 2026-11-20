@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_order_form_barcode_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.barcode.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']" position="before">
+                <group string="Barcode Scanner" invisible="state not in ('draft', 'sent')">
+                    <field name="barcode_scan" placeholder="Scan or enter product barcode..." nolabel="1"/>
+                    <button name="action_add_product_by_barcode" type="object" string="Add Product"
+                            icon="fa-barcode" class="btn-primary"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
