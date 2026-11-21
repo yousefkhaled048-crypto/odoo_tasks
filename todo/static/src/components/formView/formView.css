@@ -1,0 +1,66 @@
+.todo_form_view {
+    padding: 24px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.todo_form_title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 16px;
+}
+
+.todo_form_card {
+    background: #ffffff;
+    border: 1px solid #e7e9ed;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.todo_form_group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.todo_form_label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.todo_form_input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #1f2937;
+    background: #ffffff;
+    border: 1px solid #d8dadd;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.todo_form_input::placeholder {
+    color: #9ca3af;
+}
+
+.todo_form_input:hover {
+    border-color: #b8bcc2;
+}
+
+.todo_form_input:focus {
+    border-color: #714b67;
+    box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.15);
+}
+
+.todo_form_footer {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e7e9ed;
+}

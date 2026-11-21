@@ -1,0 +1,56 @@
+.todo_list_view {
+    padding: 16px;
+    background: #ffffff;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.todo_list_title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.todo_list_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #1f2937;
+}
+
+/* Header row, like Odoo's list header */
+.todo_list_table thead th {
+    position: sticky;
+    top: 0;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: #374151;
+    background: #ffffff;
+    border-bottom: 2px solid #d8dadd;
+    white-space: nowrap;
+}
+
+/* Body rows */
+.todo_list_table tbody td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #e7e9ed;
+    vertical-align: middle;
+}
+
+.todo_list_table tbody tr {
+    cursor: pointer;
+}
+
+.todo_list_table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* Optional: striped rows */
+.todo_list_table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.todo_list_table tbody tr:nth-child(even):hover {
+    background-color: #f1f3f5;
+}

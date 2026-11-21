@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="todo.ListView">
+        <div class="todo_list_view">
+            <h1 class="todo_list_title">ToDo Tasks</h1>
+
+            <button class="btn btn-primary m-1 p-1" t-on-click="toggleCreateTask">
+                <t t-if="state.showCreateTask">Close</t>
+                <t t-else="">New</t>
+            </button>
+
+            <t t-if="state.showCreateTask">
+                <FormView t-key="state.editingRecord ? state.editingRecord.id : 'new'"
+                          record="state.editingRecord"
+                          onRecordCreated="onRecordCreated.bind(this)"
+                          onCancel="toggleCreateTask.bind(this)"/>
+            </t>
+
+            <table class="todo_list_table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Assigned To</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.records" t-as="record" t-key="record.id">
+                        <tr>
+                            <td><t t-esc="record.name"/></td>
+                            <td><t t-esc="record.user_id[1]"/></td>
+                            <td><t t-esc="record.due_date"/></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm me-1" t-on-click="() => this.editTask(record)">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" t-on-click="() => this.deleteTask(record.id)">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</templates>

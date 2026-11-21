@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_todo_root"
+              name="To Do"
+              sequence="10"/>
+
+    <!-- Parent Menu -->
+    <menuitem id="menu_todo_tasks_parent"
+              name="Tasks"
+              parent="menu_todo_root"
+              sequence="10"/>
+
+    <!-- Menu Item (opens the list/form views) -->
+    <menuitem id="menu_todo_tasks"
+              name="Tasks"
+              parent="menu_todo_tasks_parent"
+              action="action_todo_task"
+              sequence="10"/>
+
+    <!-- OWL Tasks -->
+    <menuitem id="menu_owl_todo_tasks"
+              name="OWL Tasks"
+              parent="menu_todo_tasks_parent"
+              action="action_owl_todo_task"
+              sequence="10"/>
+
+</odoo>

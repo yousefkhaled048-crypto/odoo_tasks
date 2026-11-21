@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="todo.FormView">
+        <div class="todo_form_view">
+            <h2 class="todo_form_title">New Task</h2>
+
+            <div class="todo_form_card">
+                <div class="todo_form_group">
+                    <label class="todo_form_label">Name</label>
+                    <input class="todo_form_input" t-model="state.name" placeholder="Enter Task Name"/>
+                </div>
+
+                <div class="todo_form_group">
+                    <label class="todo_form_label">Assigned To</label>
+
+                    <select class="todo_form_input" t-model="state.user_id">
+                        <option value="">Select User</option>
+
+                        <t t-foreach="state.users" t-as="user" t-key="user.id">
+                            <option t-att-value="user.id">
+                                <t t-esc="user.name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+
+                <div class="todo_form_group">
+                    <label class="todo_form_label">Due Date</label>
+                    <input class="todo_form_input" t-model="state.due_date" type="date"/>
+                </div>
+
+                <div class="todo_form_group todo_form_checkbox">
+                    <input id="todo_is_done" type="checkbox" t-model="state.is_done"/>
+                    <label class="todo_form_label" for="todo_is_done">Done</label>
+                </div>
+
+                <div class="todo_form_footer">
+                    <button class="btn btn-primary" t-on-click="createTask">Save</button>
+                    <button class="btn btn-secondary" t-on-click="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

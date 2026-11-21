@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form View -->
+    <record id="view_todo_task_form" model="ir.ui.view">
+        <field name="name">todo.task.form</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <form string="Task">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="due_date"/>
+                            <field name="is_done"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_todo_task_list" model="ir.ui.view">
+        <field name="name">todo.task.list</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <list string="Tasks">
+                <header>
+                    <button name="task_xlsx_report" type="object" string="Print Excel Report"
+                            class="btn btn-primary"/>
+                </header>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="due_date"/>
+                <field name="is_done"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_todo_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">todo.task</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- OWL Action -->
+    <record id="action_owl_todo_task" model="ir.actions.client">
+        <field name="name">OWL Tasks</field>
+        <field name="tag">todo.action_list_view</field>
+    </record>
+
+</odoo>
