@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ===================== Header (reused in both pages) ===================== -->
+    <template id="report_invoice_header">
+        <div class="cal-hdr">
+
+            <!-- Left: English -->
+            <div class="cal-hdr-col cal-hdr-left">
+                <div class="cal-hdr-name-en">Calorena Company</div>
+                <div class="cal-hdr-line">Saudi Arabia</div>
+                <div class="cal-hdr-line">Tax ID : <span class="cal-hdr-num" t-field="doc.company_id.vat"/></div>
+                <div class="cal-hdr-line">Tel : <span class="cal-hdr-num" t-field="doc.company_id.phone"/></div>
+            </div>
+
+            <!-- Center: Logo -->
+            <div class="cal-hdr-col cal-hdr-center">
+                <div class="cal-logo">
+                    CALORENA
+                    <div class="cal-logo-sub">SECRET</div>
+                </div>
+            </div>
+
+            <!-- Right: Arabic -->
+            <div class="cal-hdr-col cal-hdr-right">
+                <div class="cal-hdr-name-ar">شركة كالورينا</div>
+                <div class="cal-hdr-line">المملكة العربية السعودية</div>
+                <div class="cal-hdr-line">الرقم الضريبي : <span class="cal-hdr-num" t-field="doc.company_id.vat"/></div>
+                <div class="cal-hdr-line">هاتف رقم : <span class="cal-hdr-num" t-field="doc.company_id.phone"/></div>
+            </div>
+
+            <div class="cal-clear"></div>
+        </div>
+
+        <!-- Horizontal line after header -->
+        <div class="cal-hdr-rule"></div>
+    </template>
+
+    <!-- ===================== Footer (real wkhtmltopdf footer: bottom of every page) ===================== -->
+    <template id="report_invoice_footer">
+        <t t-set="bank" t-value="doc.company_id.partner_id.bank_ids[:1]"/>
+        <div class="footer cal-ftr">
+
+            <!-- Right: IBAN -->
+            <div class="cal-ftr-col cal-ftr-iban">
+                <span class="cal-ftr-label">رقم الايبان:</span>
+                <span class="cal-ftr-num" t-out="bank.sanitized_acc_number or bank.acc_number or ''"/>
+            </div>
+
+            <!-- Middle: Account number (IBAN without country code and bank code) -->
+            <div class="cal-ftr-col cal-ftr-acc">
+                <span class="cal-ftr-label">رقم الحساب:</span>
+                <span class="cal-ftr-num" t-out="bank.sanitized_acc_number[8:] if bank.sanitized_acc_number else ''"/>
+            </div>
+
+            <!-- Left: Account name -->
+            <div class="cal-ftr-col cal-ftr-name">
+                <span class="cal-ftr-label">أسم الحساب:</span>
+                <span t-out="bank.acc_holder_name or doc.company_id.name or ''"/>
+            </div>
+
+            <!-- Far left: real page number -->
+            <div class="cal-ftr-col cal-ftr-page">
+                <span class="page"/>
+            </div>
+
+            <div class="cal-clear"></div>
+        </div>
+    </template>
+
+    <!-- ===================== Main report ===================== -->
+    <template id="report_sale_invoice_simple">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+
+                <!-- ===================== PAGE 1 ===================== -->
+                <div class="page cal-inv cal-p1">
+
+                    <t t-call="calorena.report_invoice_header"/>
+
+                    <!-- Title -->
+                    <div class="cal-title">فاتورة ضريبية Tax Invoice</div>
+
+                    <!-- Customer details -->
+                    <table class="cal-cust">
+                        <tr>
+                            <td colspan="3" class="cal-cell cal-cust-head">Customer Details</td>
+                        </tr>
+                        <tr>
+                            <td class="cal-cell cal-w20 cal-tl">Name</td>
+                            <td class="cal-cell cal-w60 cal-tc cal-bold">
+                                <span t-field="doc.partner_id.name"/>
+                            </td>
+                            <td class="cal-cell cal-w20 cal-tr cal-rtl">الاسم</td>
+                        </tr>
+                        <tr>
+                            <td class="cal-cell cal-tl">Customer TRN</td>
+                            <td class="cal-cell cal-tc">
+                                <span t-field="doc.partner_id.vat"/>
+                            </td>
+                            <td class="cal-cell cal-tr cal-rtl">الرقم الضريبي للعميل</td>
+                        </tr>
+                    </table>
+
+                    <!-- Invoice info table -->
+                    <table class="cal-info">
+                        <thead>
+                            <tr>
+                                <th class="cal-cell cal-w25">
+                                    <div>State</div>
+                                    <div>المنطقة</div>
+                                </th>
+                                <th class="cal-cell cal-w25">
+                                    <div>Sales Person</div>
+                                    <div>المندوب</div>
+                                </th>
+                                <th class="cal-cell cal-w25">
+                                    <div>Date</div>
+                                    <div>التاريخ</div>
+                                </th>
+                                <th class="cal-cell cal-w25">
+                                    <div>Invoice No.</div>
+                                    <div>رقم الفاتورة</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="cal-green">
+                                <td class="cal-cell">
+                                    <span t-field="doc.partner_id.state_id.name"/>
+                                </td>
+                                <td class="cal-cell">
+                                    <span t-field="doc.user_id.name"/>
+                                </td>
+                                <td class="cal-cell">
+                                    <span t-field="doc.date_order" t-options='{"widget": "date"}'/>
+                                </td>
+                                <td class="cal-cell">
+                                    <span t-field="doc.name"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Lines -->
+                    <table class="cal-lines">
+                        <thead>
+                            <tr class="cal-head-row">
+                                <th class="cal-cell-sm cal-w3">
+                                    <div>رقم</div><div>NO.</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w7">
+                                    <div>رقم الصنف</div><div>Item No</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w11">
+                                    <div>رقم الباركود</div><div>Barcode No</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w25">
+                                    <div>اسم الصنف</div><div>Item Name</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w6">
+                                    <div>الوحدة</div><div>Unit</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w6">
+                                    <div>الكمية</div><div>QTY</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w6">
+                                    <div>تسانر</div><div>Tests</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w7">
+                                    <div>سعر الوحدة</div><div>Unit price</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w5">
+                                    <div>خصم 1</div><div>D1</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w5">
+                                    <div>خصم 2</div><div>D2</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w8">
+                                    <div>الاجمالي قبل الضريبة</div><div>EXCL VAT</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w6">
+                                    <div>الضريبة</div><div>VAT 15%</div>
+                                </th>
+                                <th class="cal-cell-sm cal-w8">
+                                    <div>الاجمالي</div><div>Amount</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="i" t-value="0"/>
+                            <t t-foreach="doc.order_line" t-as="line">
+                                <t t-if="line.display_type == 'line_section'">
+                                    <tr>
+                                        <td colspan="13" class="cal-cell-sm cal-sec-row">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-elif="line.display_type == 'line_note'">
+                                    <tr>
+                                        <td colspan="13" class="cal-cell-sm cal-note-row">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="i" t-value="i + 1"/>
+                                    <tr>
+                                        <td class="cal-cell-sm"><t t-out="i"/></td>
+                                        <td class="cal-cell-sm"><span t-field="line.item_no"/></td>
+                                        <td class="cal-cell-sm"><span t-field="line.barcode_no"/></td>
+                                        <td class="cal-cell-sm cal-tr">
+                                            <span t-field="line.product_id.display_name"/>
+                                        </td>
+                                        <td class="cal-cell-sm"><span t-field="line.product_uom_id"/></td>
+                                        <td class="cal-cell-sm"><t t-out="'%.2f' % line.product_uom_qty"/></td>
+                                        <td class="cal-cell-sm"><t t-out="line.tests or '0.0'"/></td>
+                                        <td class="cal-cell-sm"><t t-out="'%.2f' % line.price_unit"/></td>
+                                        <td class="cal-cell-sm"><t t-out="'%g' % line.discount_1"/>%</td>
+                                        <td class="cal-cell-sm"><t t-out="'%g' % line.discount_2"/>%</td>
+                                        <td class="cal-cell-sm"><t t-out="'%.2f' % line.price_subtotal"/></td>
+                                        <td class="cal-cell-sm"><t t-out="'%.2f' % line.vat_amount"/></td>
+                                        <td class="cal-cell-sm"><t t-out="'%.2f' % line.amount_with_vat"/></td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- ===================== PAGE 2 ===================== -->
+                <div class="page cal-inv cal-p2">
+
+                    <t t-call="calorena.report_invoice_header"/>
+
+                    <!-- Computed values -->
+                    <t t-set="real_lines" t-value="doc.order_line.filtered(lambda l: not l.display_type)"/>
+                    <t t-set="gross_total" t-value="sum(l.price_unit * l.product_uom_qty for l in real_lines)"/>
+                    <t t-set="discount_total" t-value="gross_total - doc.custom_untaxed_total"/>
+
+                    <!-- Totals (left) + Notes (right) -->
+                    <table class="cal-tot-wrap">
+                        <tr>
+                            <!-- Totals box -->
+                            <td class="cal-w55 cal-top">
+                                <table class="cal-tot">
+                                    <tr class="cal-tot-row">
+                                        <td class="cal-w40"><t t-out="'%.2f' % gross_total"/></td>
+                                        <td class="cal-w60 cal-tot-label">الاجمالي قبل الخصم:</td>
+                                    </tr>
+                                    <tr class="cal-tot-row">
+                                        <td><t t-out="'%.2f' % discount_total"/></td>
+                                        <td class="cal-tot-label">الخصم:</td>
+                                    </tr>
+                                    <tr class="cal-tot-row">
+                                        <td><t t-out="'%.2f' % doc.custom_untaxed_total"/></td>
+                                        <td class="cal-tot-label">الاجمالي غير شامل ضريبة القيمة المضافة:</td>
+                                    </tr>
+                                    <tr class="cal-tot-row">
+                                        <td><t t-out="'%.2f' % doc.custom_vat_total"/></td>
+                                        <td class="cal-tot-label">الضريبة:</td>
+                                    </tr>
+                                    <tr>
+                                        <td><t t-out="'%.2f' % doc.custom_grand_total"/></td>
+                                        <td class="cal-tot-label">المجموع شامل الضريبة المضافة:</td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <!-- Notes -->
+                            <td class="cal-w45 cal-notes">
+                                <div>* مدة استحقاق الفاتوره الأجله ٤٥ يوم من تاريخه</div>
+                                <div>* مدة السماح فى المرتجع ١٨٠ يوم من إصدار الفاتوره</div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Signatures -->
+                    <table class="cal-sign">
+                        <tr class="cal-sign-head">
+                            <td class="cal-w25">العميل</td>
+                            <td class="cal-w25">مندوب المبيعات</td>
+                            <td class="cal-w25">مدير المبيعات</td>
+                            <td class="cal-w25">أمين المستودع</td>
+                        </tr>
+                        <tr>
+                            <td class="cal-sign-line"><div class="cal-dots"></div></td>
+                            <td class="cal-sign-line"><div class="cal-dots"></div></td>
+                            <td class="cal-sign-line"><div class="cal-dots"></div></td>
+                            <td class="cal-sign-line"><div class="cal-dots"></div></td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <!-- Footer: wkhtmltopdf puts it at the bottom of every page -->
+                <t t-call="calorena.report_invoice_footer"/>
+
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,176 @@
+/* ===== Calorena invoice report ===== */
+
+/* ---- Pages ---- */
+.cal-inv.cal-p1 { font-size: 12px; page-break-after: always; }
+.cal-inv.cal-p2 { font-size: 13px; }
+
+/* ---- Header (float columns, no table, no lines) ---- */
+.cal-inv .cal-hdr {
+    width: 100%;
+    margin-top: 2mm;
+    margin-bottom: 4mm;
+    overflow: hidden;
+    direction: ltr;
+}
+.cal-inv .cal-hdr-col {
+    float: left;
+    box-sizing: border-box;
+    font-size: 12.2pt;
+    font-weight: 700;
+    line-height: 1.55;
+}
+.cal-inv .cal-hdr-left {
+    width: 34%;
+    text-align: left;
+    direction: ltr;
+    padding-right: 3mm;
+}
+.cal-inv .cal-hdr-center {
+    width: 32%;
+    text-align: center;
+    padding: 0 2mm;
+}
+.cal-inv .cal-hdr-right {
+    width: 34%;
+    text-align: right;
+    direction: rtl;
+    padding-left: 3mm;
+}
+.cal-inv .cal-hdr-name-en {
+    font-size: 14pt;
+    font-weight: 700;
+    margin-bottom: 2mm;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+.cal-inv .cal-hdr-name-ar {
+    font-size: 15pt;
+    font-weight: 700;
+    margin-bottom: 2mm;
+    line-height: 1.25;
+}
+.cal-inv .cal-hdr-line { margin-bottom: 1.3mm; }
+.cal-inv .cal-hdr-num { direction: ltr; unicode-bidi: embed; }
+.cal-inv .cal-logo {
+    font-family: serif;
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 3px;
+    line-height: 1.3;
+    min-height: 20mm;
+}
+.cal-inv .cal-logo-sub { font-size: 12px; letter-spacing: 6px; }
+.cal-inv .cal-clear { clear: both; }
+
+/* Horizontal line after header */
+.cal-inv .cal-hdr-rule {
+    height: 0;
+    border: 0;
+    border-top: 2px solid #000;
+    margin: 0 0 4mm 0;
+    width: 100%;
+}
+
+/* ---- Title ---- */
+.cal-inv .cal-title {
+    text-align: center; font-size: 16px; font-weight: bold; margin-bottom: 8px;
+}
+
+/* ---- Cells ---- */
+.cal-inv .cal-cell { border: 1px solid #000; padding: 5px; }
+.cal-inv .cal-cell-sm { border: 1px solid #000; padding: 3px; }
+
+/* ---- Customer table ---- */
+.cal-inv .cal-cust {
+    width: 100%; margin-bottom: 10px; border-collapse: collapse; font-size: 12px;
+}
+.cal-inv .cal-cust-head {
+    background: #e2efda; text-align: center; font-weight: bold;
+}
+
+/* ---- Invoice info table ---- */
+.cal-inv .cal-info {
+    width: 100%; border-collapse: collapse; margin-bottom: 10px;
+    font-size: 12px; text-align: center;
+}
+.cal-inv .cal-info th { font-weight: normal; }
+.cal-inv .cal-green { background: #e2efda; }
+
+/* ---- Lines table ---- */
+.cal-inv .cal-lines {
+    width: 100%; border-collapse: collapse; font-size: 11px;
+    text-align: center; direction: rtl;
+}
+.cal-inv .cal-head-row { background: #e2efda; font-weight: bold; }
+.cal-inv .cal-sec-row { font-weight: bold; background: #f2f2f2; }
+.cal-inv .cal-note-row { font-style: italic; }
+
+/* ---- Totals (page 2) ---- */
+.cal-inv .cal-tot-wrap { width: 100%; margin-top: 20px; border-collapse: collapse; }
+.cal-inv .cal-tot {
+    width: 100%; border: 1px solid #000; border-collapse: collapse; text-align: center;
+}
+.cal-inv .cal-tot td { padding: 8px; }
+.cal-inv .cal-tot-row { border-bottom: 1px solid #999; }
+.cal-inv .cal-tot-label { font-weight: bold; direction: rtl; }
+.cal-inv .cal-notes {
+    vertical-align: top; text-align: right; direction: rtl;
+    padding-right: 20px; line-height: 2.2;
+}
+
+/* ---- Signatures ---- */
+.cal-inv .cal-sign {
+    width: 100%; margin-top: 50px; text-align: center; direction: rtl;
+    border-collapse: collapse;
+}
+.cal-inv .cal-sign-head { font-weight: bold; }
+.cal-inv .cal-sign-line { padding-top: 40px; }
+.cal-inv .cal-dots { border-bottom: 1px dotted #000; margin: 0 25px; }
+
+/* ---- Footer (NOT scoped to .cal-inv: wkhtmltopdf renders it separately) ---- */
+.cal-ftr {
+    width: 100%;
+    overflow: hidden;
+    direction: rtl;
+    font-size: 11pt;
+    line-height: 1.6;
+}
+.cal-ftr .cal-ftr-col {
+    float: right;
+    box-sizing: border-box;
+    text-align: right;
+}
+.cal-ftr .cal-ftr-iban { width: 38%; }
+.cal-ftr .cal-ftr-acc  { width: 28%; }
+.cal-ftr .cal-ftr-name { width: 28%; }
+.cal-ftr .cal-ftr-page {
+    width: 6%;
+    text-align: left;
+    direction: ltr;
+    font-weight: bold;
+}
+.cal-ftr .cal-ftr-label { font-weight: bold; }
+.cal-ftr .cal-ftr-num { direction: ltr; unicode-bidi: embed; }
+.cal-ftr .cal-clear { clear: both; }
+
+/* ---- Utilities (keep last) ---- */
+.cal-inv .cal-w3 { width: 3%; }
+.cal-inv .cal-w5 { width: 5%; }
+.cal-inv .cal-w6 { width: 6%; }
+.cal-inv .cal-w7 { width: 7%; }
+.cal-inv .cal-w8 { width: 8%; }
+.cal-inv .cal-w11 { width: 11%; }
+.cal-inv .cal-w20 { width: 20%; }
+.cal-inv .cal-w25 { width: 25%; }
+.cal-inv .cal-w33 { width: 33%; }
+.cal-inv .cal-w34 { width: 34%; }
+.cal-inv .cal-w40 { width: 40%; }
+.cal-inv .cal-w45 { width: 45%; }
+.cal-inv .cal-w55 { width: 55%; }
+.cal-inv .cal-w60 { width: 60%; }
+.cal-inv .cal-tl { text-align: left; }
+.cal-inv .cal-tr { text-align: right; }
+.cal-inv .cal-tc { text-align: center; }
+.cal-inv .cal-rtl { direction: rtl; }
+.cal-inv .cal-bold { font-weight: bold; }
+.cal-inv .cal-top { vertical-align: top; }
